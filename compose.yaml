@@ -1,0 +1,12 @@
+services:
+  caseflow:
+    build: .
+    ports:
+      - "5055:8080"
+    volumes:
+      - caseflow-data:/app/data
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+
+volumes:
+  caseflow-data:

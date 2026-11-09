@@ -1,0 +1,14 @@
+**/bin/
+**/obj/
+**/data/
+.vs/
+.vscode/
+.idea/
+*.suo
+*.user
+*.db
+*.db-shm
+*.db-wal
+.DS_Store
+TestResults/
+coverage/

@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#101a30" />
+  <meta name="description" content="CaseFlow: a C# ASP.NET Core case management portfolio project." />
+  <title>CaseFlow — Support Operations</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <script src="/app.js" defer></script>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar" aria-label="Primary navigation">
+    <div class="brand"><div class="brand-mark">CF</div><div><strong>CaseFlow</strong><small>Operations workspace</small></div></div>
+    <div class="nav-label">WORKSPACE</div>
+    <a class="nav-link active" href="#overview"><span class="nav-icon">▦</span> Overview</a>
+    <a class="nav-link" href="#cases"><span class="nav-icon">☷</span> Customer cases</a>
+    <a class="nav-link" href="/health" target="_blank" rel="noopener noreferrer"><span class="nav-icon">♡</span> System health <span class="external">↗</span></a>
+    <div class="sidebar-bottom">
+      <div class="system-state"><span class="live-dot"></span> Demo environment</div>
+      <p>ASP.NET Core · EF Core · SQLite</p>
+      <small>Built to demonstrate enterprise workflow design.</small>
+    </div>
+  </aside>
+  <main class="main-content" id="overview">
+    <header class="topbar">
+      <div class="breadcrumbs">Workspace <span>/</span> <strong>Overview</strong></div>
+      <div class="topbar-end"><span class="live-pill"><span class="live-dot"></span> Live database</span><div class="avatar" title="Demo User">DU</div></div>
+    </header>
+    <div class="content">
+      <div class="page-heading">
+        <div><div class="eyebrow">CUSTOMER OPERATIONS</div><h1>Case management <span>overview</span></h1><p>Manage service requests, track deadlines, and keep work moving.</p></div>
+        <button class="btn btn-primary" id="newCaseButton" type="button"><span aria-hidden="true">＋</span> New case</button>
+      </div>
+      <div class="metric-grid" aria-label="Case summary">
+        <article class="metric"><div class="metric-top"><span>Total cases</span><span class="metric-icon blue">▤</span></div><strong id="statTotal">—</strong><small>All customer requests</small></article>
+        <article class="metric"><div class="metric-top"><span>In progress</span><span class="metric-icon violet">◉</span></div><strong id="statInProgress">—</strong><small>Currently being worked</small></article>
+        <article class="metric"><div class="metric-top"><span>Overdue</span><span class="metric-icon red">◷</span></div><strong id="statOverdue">—</strong><small>Past configured SLA</small></article>
+        <article class="metric"><div class="metric-top"><span>Resolved</span><span class="metric-icon green">✓</span></div><strong id="statResolved">—</strong><small>Awaiting final closure</small></article>
+      </div>
+      <section class="cases-panel" id="cases" aria-labelledby="casesTitle">
+        <div class="panel-heading"><div><h2 id="casesTitle">Customer cases</h2><p>Search, triage, and manage your workflow.</p></div><button id="exportButton" class="btn btn-light" type="button">⇩ Export CSV</button></div>
+        <div class="toolbar">
+          <label class="search-box"><span aria-hidden="true">⌕</span><input id="searchInput" type="search" placeholder="Search by case, customer, reference..." aria-label="Search cases" /></label>
+          <label class="select-wrap"><span>Status</span><select id="statusFilter"><option value="">All statuses</option><option value="Open">Open</option><option value="InProgress">In progress</option><option value="WaitingOnCustomer">Waiting on customer</option><option value="Resolved">Resolved</option><option value="Closed">Closed</option></select></label>
+          <label class="select-wrap"><span>Priority</span><select id="priorityFilter"><option value="">All priorities</option><option value="Critical">Critical</option><option value="High">High</option><option value="Normal">Normal</option><option value="Low">Low</option></select></label>
+        </div>
+        <div class="table-scroll"><table><thead><tr><th>CASE / REFERENCE</th><th>CUSTOMER</th><th>PRIORITY</th><th>STATUS</th><th>ASSIGNEE</th><th>SLA DUE</th><th aria-label="Open details"></th></tr></thead><tbody id="casesBody"><tr><td colspan="7" class="empty-state">Loading cases…</td></tr></tbody></table></div>
+        <footer class="table-footer"><span id="paginationInfo">Loading…</span><div class="pagination"><button id="prevPage" class="btn btn-light" type="button">← Previous</button><button id="nextPage" class="btn btn-light" type="button">Next →</button></div></footer>
+      </section>
+      <div class="bottom-note"><span>ⓘ</span> Demo data is fictional. This prototype is not connected to Dynamics 365 or Power Platform.</div>
+    </div>
+  </main>
+</div>
+<div id="drawerBackdrop" class="backdrop hidden" aria-hidden="true">
+  <aside class="drawer" id="caseDrawer" role="dialog" aria-modal="true" aria-label="Case details" tabindex="-1">
+    <div class="drawer-header"><div><div class="eyebrow">CASE DETAILS</div><h2 id="detailHeading">Case details</h2></div><button class="close-button" id="closeDrawer" type="button" aria-label="Close case details">×</button></div>
+    <div id="caseDetailContent" class="drawer-scroll"></div>
+  </aside>
+</div>
+<div id="createBackdrop" class="backdrop modal-backdrop hidden" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="newCaseHeading">
+    <div class="modal-header"><div><div class="eyebrow">CREATE REQUEST</div><h2 id="newCaseHeading">New customer case</h2></div><button class="close-button" id="closeCreate" type="button" aria-label="Close new case form">×</button></div>
+    <form id="createForm" class="modal-form">
+      <label>Case title<input name="title" minlength="5" maxlength="120" placeholder="e.g. Invoice generation fails" required /></label>
+      <label>Description<textarea name="description" rows="4" minlength="10" maxlength="2000" placeholder="Describe the problem and expected behavior" required></textarea></label>
+      <div class="form-row"><label>Customer name<input name="customerName" minlength="2" maxlength="100" placeholder="e.g. Acme Services" required /></label><label>Email<input type="email" name="customerEmail" maxlength="254" placeholder="team@acme.example" required /></label></div>
+      <div class="form-row"><label>Priority<select name="priority"><option value="Normal">Normal · 72h</option><option value="Low">Low · 7 days</option><option value="High">High · 24h</option><option value="Critical">Critical · 4h</option></select></label><label>Assign to (optional)<input name="assignedTo" maxlength="80" placeholder="Team member" /></label></div>
+      <div class="form-actions"><button type="button" class="btn btn-light" id="cancelCreate">Cancel</button><button type="submit" class="btn btn-primary" id="submitCreate">Create case</button></div>
+    </form>
+  </div>
+</div>
+<div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+</body>
+</html>

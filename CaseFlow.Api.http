@@ -1,0 +1,41 @@
+@baseUrl = http://localhost:5055
+
+### Health
+GET {{baseUrl}}/health
+
+### Dashboard
+GET {{baseUrl}}/api/dashboard
+
+### List and filter cases
+GET {{baseUrl}}/api/cases?page=1&pageSize=10&status=Open
+
+### Create a case
+POST {{baseUrl}}/api/cases
+Content-Type: application/json
+
+{
+  "title": "Document generation stops on large batches",
+  "description": "A large scheduled export job fails after processing about fifty records.",
+  "customerName": "Example Customer",
+  "customerEmail": "support@example.com",
+  "priority": "High",
+  "assignedTo": "Alex"
+}
+
+### Use the id and version returned from the create request in subsequent calls
+@caseId = 00000000-0000-0000-0000-000000000000
+
+### Change status (version must match current server value)
+PUT {{baseUrl}}/api/cases/{{caseId}}/status
+Content-Type: application/json
+
+{ "status": "InProgress", "version": 1, "actor": "Alex" }
+
+### Add a note
+POST {{baseUrl}}/api/cases/{{caseId}}/notes
+Content-Type: application/json
+
+{ "author": "Alex", "message": "Reproduced the failure locally.", "version": 2 }
+
+### Export CSV
+GET {{baseUrl}}/api/cases/export.csv
