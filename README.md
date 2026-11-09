@@ -111,10 +111,4 @@ CaseFlow-PTM-Portfolio/
 
 **This is a local portfolio prototype, not a production-ready multi-tenant CRM.** It intentionally has no authentication, authorization, role-based access control, tenant isolation, rate limiting, encrypted secrets handling, production-grade migrations, or customer-data retention policy. **Do not expose it publicly or enter real customer information.** Before production use: introduce Microsoft Entra ID / OAuth, tenant-aware permissions, audit protections, structured observability, migrations, and a managed database; implement genuine Dynamics 365 integration only after reviewing Microsoft Dataverse APIs and permissions.
 
-## Learn and make this your own
 
-Before putting this repository on your CV or discussing it in an interview, **run the tests, inspect each layer, modify the behavior, and be ready to explain your own contributions**. Good personal enhancements: add authenticated users, an SLA configuration screen, Dataverse integration through an official API, or PDF report generation.
-
-## License
-
-MIT. See [`LICENSE`](LICENSE).
